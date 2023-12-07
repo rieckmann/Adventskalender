@@ -4,7 +4,7 @@ clear all
 data = readlines("A07.txt");
 data = split(data, ' ');
 T = table(data(:,1), arrayfun(@str2double, data(:,2)),'VariableNames', {'Hand', 'Value'});
-T = [T, rowfun(@gettype, T, "InputVariables",["Hand"], "OutputVariableNames", "Type")];
+T = [T, rowfun(@(x) gettype(x,1), T, "InputVariables",["Hand"], "OutputVariableNames", "Type")];
 for i=1:5
     T = [T, rowfun(@(x) getvalue(x,i), T, "InputVariables",["Hand"], "OutputVariableNames", "ValueCard" + num2str(i))];
 end
@@ -23,6 +23,7 @@ for i=1:5
     t(t == 11) = 1;
     T(:,3+i) =array2table(t);
 end
+T(:,3) = rowfun(@(x) gettype(x,2), T, "InputVariables", ["Hand"], "OutputVariableNames", "Type");
 T = sortrows(T, [3 4 5 6 7 8]);
 
 total2 = 0;
@@ -32,10 +33,23 @@ end
 disp(['Part 2 solution: ', num2str(total2)])
 
 
-function type = gettype(hand)
+function type = gettype(hand,part)
     hand = double(convertStringsToChars(hand));
     cards = unique(hand);
-    type = sum(arrayfun(@(x) 3^x,histcounts(hand, [cards, cards(end)+1])));
+    counts = [cards; histcounts(hand, [cards, cards(end)+1])];
+    if part == 1    
+        type = sum(arrayfun(@(x) 3^x, counts(2,:)));
+        return;
+    end
+    joker = counts(2,counts(1,:)==74);
+    if ~isempty(joker) && joker < 5
+        jokerCol = find(counts(1,:) == 74);
+        counts(:,jokerCol) = [];
+        counts = sortrows(counts',2, 'descend');
+        counts(1,2) = counts(1,2) + joker;
+        counts = counts';
+    end
+    type = sum(arrayfun(@(x) 3^x, counts(2,:)));
 end
 
 function value = getvalue(hand, i)
