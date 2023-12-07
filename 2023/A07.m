@@ -10,28 +10,25 @@ for i=1:5
 end
 
 T = sortrows(T, [3 4 5 6 7 8]);
-
 total = 0;
 for i=1:height(T)
     total = total + i*T.Value(i);
 end
 disp(['Part 1 solution: ', num2str(total)])
 
-
 for i=1:5
     t = table2array(T(:,3+i));
     t(t == 11) = 1;
     T(:,3+i) =array2table(t);
 end
-T(:,3) = rowfun(@(x) gettype(x,2), T, "InputVariables", ["Hand"], "OutputVariableNames", "Type");
-T = sortrows(T, [3 4 5 6 7 8]);
+T = [T, rowfun(@(x) gettype(x,2), T, "InputVariables", ["Hand"], "OutputVariableNames", "TypePart2")];
+T = sortrows(T, [9 4 5 6 7 8]);
 
 total2 = 0;
 for i=1:height(T)
     total2 = total2 + i*T.Value(i);
 end
 disp(['Part 2 solution: ', num2str(total2)])
-
 
 function type = gettype(hand,part)
     hand = double(convertStringsToChars(hand));
