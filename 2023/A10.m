@@ -4,6 +4,8 @@ clear all
 file = fopen('A10.txt');
 data = fread(file,[142, 140])';
 data = data(:,1:140);
+fclose(file);
+
 symbols = ['|','-','L','J','7','F','.','S'];
 values = double(symbols);
 [steps, loop] = extractloop(data);
