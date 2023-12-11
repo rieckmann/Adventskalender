@@ -1,10 +1,8 @@
 clc
 clear all
 
-file = fopen('A11.txt');
-data = fread(file,[142, 140])';
-data = data(:,1:140)-46;
-fclose(file);
+data = double(cell2mat(convertStringsToChars(readlines('A11.txt'))));
+data = data-46;
 
 universe = data;
 % count galaxies
