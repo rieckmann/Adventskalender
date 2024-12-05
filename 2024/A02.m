@@ -2,15 +2,7 @@ clc
 clear all
 close all
 
-file = fopen('A02.txt');
 
-line = fgetl(file);
-i = 1;
-while line ~= -1
-    data{i,1} = str2num(line);
-    i = i+1;
-    line = fgetl(file);
-end
 
 adventdriver(@part1, data);
 
