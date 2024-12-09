@@ -10,7 +10,7 @@ data = string(splitlines(file));
 %% actual code
 adventdriver(@part1, data);
 
-adventdriver(@part2, data); % 145149066700218 too low
+adventdriver(@part2, data);
 
 function r = part1(data)
 
